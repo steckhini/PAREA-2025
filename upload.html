@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      function uploadReceipt() {
+        const file = document.getElementById('file').files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64 = e.target.result.split(',')[1];
+          const groupId = localStorage.getItem('groupId');
+          google.script.run.withSuccessHandler(() => {
+            alert('Receipt uploaded successfully!');
+          }).uploadFile(base64, groupId + "_Receipt.png", groupId);
+        };
+        reader.readAsDataURL(file);
+      }
+    </script>
+  </head>
+  <body>
+    <h3>Upload Payment Receipt</h3>
+    <input type="file" id="file" accept="image/*"><br><br>
+    <button onclick="uploadReceipt()">Upload</button>
+  </body>
+</html>

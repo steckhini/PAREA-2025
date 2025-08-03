@@ -177,15 +177,25 @@
             return false;
           }
 
-          google.script.run.withSuccessHandler((res) => {
+          fetch('https://script.google.com/macros/s/AKfycbwrFZ1yfg0WpbY9cVhQaT6DoUsvZKxwYCkKt-LlW0vgEZXetFQQQmqd5tNUTx8ZSLyW/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              action: 'handleFormSubmission',
+              guests: JSON.stringify(guests),
+              paymentMethod: method
+            })
+          })
+          .then(response => response.json())
+          .then(res => {
             localStorage.setItem('groupId', res.groupId);
             showThankYou(method);
             if (method === 'paypal' && res.paypalUrl) {
               window.open(res.paypalUrl, '_blank');
             }
-          }).handleFormSubmission({
-            guests: JSON.stringify(guests),
-            paymentMethod: method
+          })
+          .catch(error => {
+            alert('Errore durante la registrazione: ' + error);
           });
 
           return false;

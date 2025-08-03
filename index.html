@@ -130,7 +130,7 @@
 
       // Questo è l'endpoint della tua funzione Netlify.
       // Sostituisce l'URL di Google Apps Script.
-      const NETLIFY_FUNCTION_URL = '/.netlify/functions/submit-form';
+      const NETLIFY_FUNCTION_URL = '/.netlify/functions/submit';
 
       async function handleSubmit(event) {
         event.preventDefault(); // Impedisce l'invio tradizionale del form
@@ -725,7 +725,7 @@
     <form id="registration-form" onsubmit="handleSubmit(event)">
        <h3 class="center-text">Form di Iscrizione</h3>
 
-       
+
       <div class="info-block">
         <p class="warning-note">
           <strong>⚠️ Nota Bene: La compilazione del form non garantisce l'inclusione all'evento.

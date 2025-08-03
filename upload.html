@@ -12,7 +12,7 @@
   reader.onload = function(e) {
     const base64 = e.target.result.split(',')[1];
     const groupId = localStorage.getItem('groupId');
-    const url = 'https://script.google.com/macros/s/AKfycbxu0Kh5TA31xWPytxyl0lxXEH4J4v8kdVok2AetmATWuNxtxf7qzVR76CukhjCTnmvA/exec'
+    const url = 'https://script.google.com/macros/s/AKfycbwtAZjOh6JwuIXiDo2L6nRepq1InlY68n1Av14nPu9Jgt-rJBI4879HfiGkHmWtfjeo/exec'
       + '?action=uploadFile'
       + '&base64Data=' + encodeURIComponent(base64)
       + '&fileName=' + encodeURIComponent(groupId + "_Receipt.png")

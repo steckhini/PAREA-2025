@@ -13,6 +13,16 @@ const paypalLinks = [
   'https://paypal.me/MartiMarangio',
 ];
 
+
+function doPost(e) {
+  const data = JSON.parse(e.postData.contents);
+  if (data.action === 'uploadFile') {
+    return ContentService.createTextOutput(
+      uploadFile(data.base64Data, data.fileName, data.groupId)
+    );
+  }
+}
+
 function doGet(e) {
   const page = e.parameter.page;
   if (page == 'thankyou') {

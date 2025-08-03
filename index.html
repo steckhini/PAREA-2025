@@ -97,17 +97,17 @@
         const offlineBtn = document.getElementById('offlineBtn');
 
         if (selected === 'paypal') {
-          paypalBtn.style.opacity = '1';
+          paypalBtn.style.display = 'block';;
           paypalBtn.style.maxHeight = '50px';
           paypalBtn.style.padding = '1.4rem 1.7rem';
-          offlineBtn.style.opacity = '0';
+          offlineBtn.style.display = 'none';
           offlineBtn.style.maxHeight = '0';
           offlineBtn.style.padding = '0';
         } else {
-          paypalBtn.style.opacity = '0';
+          paypalBtn.style.display = 'none';
           paypalBtn.style.maxHeight = '0';
           paypalBtn.style.padding = '0';
-          offlineBtn.style.opacity = '1';
+          offlineBtn.style.display = 'block';
           offlineBtn.style.maxHeight = '50px';
           offlineBtn.style.padding = '1.4rem 1.7rem';
         }
@@ -177,14 +177,13 @@
             return false;
           }
 
-          fetch('https://script.google.com/macros/s/AKfycbxu0Kh5TA31xWPytxyl0lxXEH4J4v8kdVok2AetmATWuNxtxf7qzVR76CukhjCTnmvA/exec', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action: 'handleFormSubmission',
-              guests: JSON.stringify(guests),
-              paymentMethod: method
-            })
+          const url = 'https://script.google.com/macros/s/AKfycbwrFZ1yfg0WpbY9cVhQaT6DoUsvZKxwYCkKt-LlW0vgEZXetFQQQmqd5tNUTx8ZSLyW/exec'
+            + '?action=handleFormSubmission'
+            + '&guests=' + encodeURIComponent(JSON.stringify(guests))
+            + '&paymentMethod=' + encodeURIComponent(method);
+
+          fetch(url, {
+            method: 'GET'
           })
           .then(response => response.json())
           .then(res => {
@@ -465,12 +464,7 @@
         transition: opacity 0.3s, max-height 0.3s, padding 0.3s;
       }
 
-      .payment-button.hidden {
-        opacity: 0;
-        max-height: 0;
-        padding: 0;
-        margin: 0;
-      }
+      
 
       .payment-options {
         display: flex;
@@ -829,4 +823,3 @@
   </body>
 
 </html>
-

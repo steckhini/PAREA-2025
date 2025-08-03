@@ -12,15 +12,14 @@
   reader.onload = function(e) {
     const base64 = e.target.result.split(',')[1];
     const groupId = localStorage.getItem('groupId');
-    fetch('https://script.google.com/macros/s/AKfycbxu0Kh5TA31xWPytxyl0lxXEH4J4v8kdVok2AetmATWuNxtxf7qzVR76CukhjCTnmvA/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'uploadFile',
-        base64Data: base64,
-        fileName: groupId + "_Receipt.png",
-        groupId: groupId
-      })
+    const url = 'https://script.google.com/macros/s/AKfycbxu0Kh5TA31xWPytxyl0lxXEH4J4v8kdVok2AetmATWuNxtxf7qzVR76CukhjCTnmvA/exec'
+      + '?action=uploadFile'
+      + '&base64Data=' + encodeURIComponent(base64)
+      + '&fileName=' + encodeURIComponent(groupId + "_Receipt.png")
+      + '&groupId=' + encodeURIComponent(groupId);
+
+    fetch(url, {
+      method: 'GET'
     })
     .then(response => response.text())
     .then(result => {

@@ -156,54 +156,63 @@
       }
 
       function handleSubmit() {
-        try {
-          const blocks = document.querySelectorAll('.guest-block');
-          const guests = [];
+          try {
+            const blocks = document.querySelectorAll('.guest-block');
+            const guests = [];
 
-          blocks.forEach(b => {
-            const inputs = b.querySelectorAll('input');
-            guests.push({
-              name: inputs[0].value,
-              surname: inputs[1].value,
-              email: inputs[2].value,
-              phone: inputs[3].value
+            blocks.forEach(b => {
+              const inputs = b.querySelectorAll('input');
+              guests.push({
+                name: inputs[0].value,
+                surname: inputs[1].value,
+                email: inputs[2].value,
+                phone: inputs[3].value
+              });
             });
-          });
 
-          const method = document.querySelector('input[name="paymentMethod"]:checked')?.value;
+            const method = document.querySelector('input[name="paymentMethod"]:checked')?.value;
 
-          if (!method) {
-            alert('Seleziona un metodo di pagamento.');
+            if (!method) {
+              alert('Seleziona un metodo di pagamento.');
+              return false;
+            }
+
+            const url = 'https://script.google.com/macros/s/AKfycbyMEqPSKPo8KjdCntFsxq-g4kwb34Kf0njODlDDDJ7C0u3S-Gyv6oooIf0d45W5tH7F/exec';
+
+            fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                action: 'submitForm',
+                guests: guests,
+                paymentMethod: method
+              })
+            })
+            .then(response => response.json())
+            .then(res => {
+              if (res.success) {
+                localStorage.setItem('groupId', res.data.groupId);
+                showThankYou(method);
+                if (method === 'paypal' && res.data.paypalUrl) {
+                  window.open(res.data.paypalUrl, '_blank');
+                }
+              } else {
+                alert('Errore: ' + res.error);
+              }
+            })
+            .catch(error => {
+              alert('Errore durante la registrazione: ' + error);
+            });
+
+            return false;
+          } catch (e) {
+            console.error(e);
+            alert('Errore nel form. Riprova.');
             return false;
           }
-
-          const url = 'https://script.google.com/macros/s/AKfycbzAT-owi5jVEXBNVw8eqb5peoM9GQDU75An-otSKa-8qH24IUkCR4_-98rb5T98emTG/exec'
-            + '?action=handleFormSubmission'
-            + '&guests=' + encodeURIComponent(JSON.stringify(guests))
-            + '&paymentMethod=' + encodeURIComponent(method);
-
-          fetch(url, {
-            method: 'GET'
-          })
-          .then(response => response.json())
-          .then(res => {
-            localStorage.setItem('groupId', res.groupId);
-            showThankYou(method);
-            if (method === 'paypal' && res.paypalUrl) {
-              window.open(res.paypalUrl, '_blank');
-            }
-          })
-          .catch(error => {
-            alert('Errore durante la registrazione: ' + error);
-          });
-
-          return false;
-        } catch (e) {
-          console.error(e);
-          alert('Errore nel form. Riprova.');
-          return false;
         }
-      }
 
       document.addEventListener('DOMContentLoaded', () => {
         onPaymentChange();
